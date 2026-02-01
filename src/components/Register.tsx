@@ -1,4 +1,8 @@
-export const Register = (props) => {
+type Props = {
+    onClick: () => void;
+};
+
+export const Register = (props:Props) => {
     const {onClick} = props;
 
     return (

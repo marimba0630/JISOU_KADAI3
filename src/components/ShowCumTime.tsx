@@ -1,4 +1,8 @@
-export const ShowCumTime = (props) => {
+type Props = {
+    cumTime: number;
+};
+
+export const ShowCumTime = (props: Props) => {
     const { cumTime } = props;
 
     return (

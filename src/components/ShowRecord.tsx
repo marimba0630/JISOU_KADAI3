@@ -1,4 +1,11 @@
-export const ShowRecord = (props) => {
+import { Record } from "../domain/record";
+
+type Props = {
+    records: Record[];
+    onClick: (id: number) => void;
+}
+
+export const ShowRecord = (props: Props) => {
     const { records, onClick } = props;
     return (
         <div>

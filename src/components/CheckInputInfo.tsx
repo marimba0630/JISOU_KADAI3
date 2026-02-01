@@ -1,4 +1,9 @@
-export const CheckInputInfo = (props) => {
+type Props = {
+    infoType: string;
+    inputValue: String;
+};
+
+export const CheckInputInfo = (props: Props) => {
     const {infoType, inputValue} = props;
 
     if(infoType === "Text"){

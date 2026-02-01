@@ -1,4 +1,12 @@
-export const InputInfo = (props) => {
+import { type ChangeEvent } from "react";
+
+type Props = {
+    infoType: string;
+    inputValue: string;
+    onChange: (e:ChangeEvent<HTMLInputElement>) => void;
+};
+
+export const InputInfo = (props:Props) => {
     const {infoType, inputValue, onChange} = props;
 
     if(infoType === "Text"){
