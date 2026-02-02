@@ -2,11 +2,14 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { LearningRecord } from './LearningRecord'
 import { initAnalytics } from './lib/firebase'
+import { ChakraProvider, defaultConfig, createSystem } from "@chakra-ui/react"
 
 initAnalytics();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <LearningRecord />
+    <ChakraProvider value={createSystem(defaultConfig, {})}>
+      <LearningRecord />
+    </ChakraProvider>
   </StrictMode>,
 )

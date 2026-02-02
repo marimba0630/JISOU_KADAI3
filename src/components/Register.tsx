@@ -1,3 +1,5 @@
+import { Button } from "@chakra-ui/react"
+
 type Props = {
     onClick: () => void;
 };
@@ -7,7 +9,7 @@ export const Register = (props:Props) => {
 
     return (
         <div>
-            <button onClick={onClick}>登録</button>
+            <Button onClick={onClick}>登録</Button>
         </div> 
     );
 }

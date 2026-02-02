@@ -16,6 +16,7 @@ export const LearningRecord = () => {
   const [error, setError] = useState("");
   const [cumTime, setCumTime] = useState(0);
   const [loadingFlag, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const getRecords = async () => {
     try {
