@@ -10,6 +10,6 @@ export const Register = (props:Props) => {
     return (
         <div>
             <Button onClick={onClick}>登録</Button>
-        </div> 
+        </div>
     );
 }

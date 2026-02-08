@@ -1,75 +1,104 @@
-import { memo, useState, useEffect, type ChangeEvent } from "react"
+import { memo, useEffect } from "react"
 import { Stack, Dialog, CloseButton, Field, Input, Button, NumberInput } from "@chakra-ui/react"
-import { Record } from "../domain/record.ts"
+import { insertRecord } from "../lib/supabaseCRUDFunctions.ts"
+import { useForm, Controller } from "react-hook-form"
 
 type Props = {
-    record: Record | null;
+    record: {title:string, time:number};
     open: boolean;
     setOpen: (open: boolean) => void;
+    reload: () => void;
 };
 
+type FormValues = {
+    title: string;
+    time: number;
+};
 
 export const RegisterModal = memo((props: Props) => {
-    const { record, open, setOpen } = props; 
+    const { record, open, setOpen, reload } = props; 
 
-    const [ title, setTitle ] = useState("");
-    const [ time, setTime ] = useState(0);
-    const [ titleBlankFlag, setTitleBlankFlag ] = useState(false);
-    const [ valueErrorFlag, setValueErrorFlag ] = useState(false); 
+    const { register, control, reset, handleSubmit, formState:{errors}, trigger } = useForm<FormValues>({defaultValues: {title:"", time:0}, mode: "onChange"});
 
     useEffect(() => {
-        setTitle(record?.title ?? "");
-        setTime(record?.time ?? 0);
-    }, [record]);
+       if(open){
+            reset({
+                title: record?.title ?? "",
+                time: record?.time ?? 0
+            });
 
-    const onChangeTitle = (e:ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value);
-        setTitleBlankFlag(false);
-        if(e.target.value == ""){
-            setTitleBlankFlag(true);
-        }
-    }
+            setTimeout(() => {
+                trigger(["title", "time"]);
+            }, 0);
+       }
+    }, [record, open, reset, trigger]);
+
+    const onSubmit = async (data: FormValues) => {
+        await insertRecord(data);
+        setOpen(false);
+        reload();
+    };
 
     return (
         <>
             <Dialog.Root
-                lazyMount
                 open={open}
-                onOpenChange={(e) => setOpen(e.open)}
+                onOpenChange={(e) => {
+                    setOpen(e.open)
+                    if(!e.open){
+                        reset();
+                    }
+                }}
                 trapFocus={false}
                 >
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
                     <Dialog.Content pb={2}>
-                        <Dialog.Header>以下の内容で登録します</Dialog.Header>
+                        <Dialog.Header>新規登録</Dialog.Header>
                         <Dialog.Body>
                             <Stack gap={4}>
-                                <Field.Root>
+                                <Field.Root invalid={!!errors.title}>
                                     <Field.Label>
                                         学習内容
                                     </Field.Label>
-                                    <Input value={title} onChange={onChangeTitle} />
-                                    {titleBlankFlag ? <Field.ErrorText>入力必須です</Field.ErrorText> : <></>}
+                                    <Input 
+                                        id="title" 
+                                        {...register("title", {
+                                            validate: (v) => v.trim() !== "" || "内容の入力は必須です"
+                                        })} 
+                                    />
+                                <Field.ErrorText>{errors.title?.message}</Field.ErrorText>
+                                </Field.Root>
+                                <Field.Root invalid={!!errors.time}>
                                     <Field.Label>
                                         時間
                                     </Field.Label>
-                                    <NumberInput.Root value={time.toString()} width="200px" onValueChange={(details) => {
-                                        if(!Number.isNaN(details.valueAsNumber) && details.valueAsNumber > 0){
-                                            setTime(details.valueAsNumber);
-                                            setValueErrorFlag(false);
-                                        }else{
-                                            setValueErrorFlag(true);
-                                        }
-                                    }}>
-                                        <NumberInput.Control />
-                                        <NumberInput.Input />
-                                    </NumberInput.Root>
-                                    {valueErrorFlag ? <Field.ErrorText>0より大きい値を入力してください</Field.ErrorText> : <></>}
+                                    <Controller
+                                        name="time"
+                                        control={control}
+                                        rules={{
+                                            validate: v =>
+                                                v >= 0 || "時間は0以上である必要があります"
+                                        }}
+                                        render = {({field}) => (
+                                            <NumberInput.Root 
+                                                value={String(field.value ?? "0")} 
+                                                width="200px" 
+                                                onValueChange={(details) => {
+                                                    field.onChange(details.valueAsNumber);}}
+                                            >
+                                                <NumberInput.Control />
+                                                <NumberInput.Input />
+                                            </NumberInput.Root>
+                                        )}
+                                    />
+                                    {<Field.ErrorText>時間は0以上である必要があります</Field.ErrorText>}
                                 </Field.Root>
                             </Stack>
                         </Dialog.Body>
                         <Dialog.Footer>
-                            <Button onChange={}>登録</Button>
+                            <Button onClick={handleSubmit(onSubmit)}>登録</Button>
+                            <Button onClick={() => setOpen(false)}>キャンセル</Button>
                         </Dialog.Footer>
                         <Dialog.CloseTrigger asChild>
                             <CloseButton />
