@@ -11,7 +11,8 @@
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "strict": true,
-    "types": ["jest", "@testing-library/jest-dom"]
+    "types": ["jest", "@testing-library/jest-dom", "vitest/globals"],
+    "lib": ["DOM", "DOM.Iterable", "ES2020"]
   },
   "include": [
     "src",

@@ -1,6 +1,6 @@
 import { memo, useEffect } from "react"
 import { Stack, Dialog, CloseButton, Field, Input, Button, NumberInput } from "@chakra-ui/react"
-import { insertRecord } from "../lib/supabaseCRUDFunctions.ts"
+import { insertRecord } from "../lib/supabaseCRUDFunctions"
 import { useForm, Controller } from "react-hook-form"
 
 type Props = {
@@ -13,6 +13,10 @@ type Props = {
 type FormValues = {
     title: string;
     time: number;
+};
+
+type ValueChangeDetails = {
+    value: string;
 };
 
 export const RegisterModal = memo((props: Props) => {
@@ -58,7 +62,7 @@ export const RegisterModal = memo((props: Props) => {
                         <Dialog.Body>
                             <Stack gap={4}>
                                 <Field.Root invalid={!!errors.title}>
-                                    <Field.Label>
+                                    <Field.Label htmlFor="title">
                                         学習内容
                                     </Field.Label>
                                     <Input 
@@ -70,7 +74,7 @@ export const RegisterModal = memo((props: Props) => {
                                 <Field.ErrorText>{errors.title?.message}</Field.ErrorText>
                                 </Field.Root>
                                 <Field.Root invalid={!!errors.time}>
-                                    <Field.Label>
+                                    <Field.Label htmlFor="time">
                                         時間
                                     </Field.Label>
                                     <Controller
@@ -84,11 +88,11 @@ export const RegisterModal = memo((props: Props) => {
                                             <NumberInput.Root 
                                                 value={String(field.value ?? "0")} 
                                                 width="200px" 
-                                                onValueChange={(details) => {
-                                                    field.onChange(details.valueAsNumber);}}
+                                                onValueChange={(details: ValueChangeDetails) => {
+                                                    field.onChange(parseInt(details.value));}}
                                             >
                                                 <NumberInput.Control />
-                                                <NumberInput.Input />
+                                                <NumberInput.Input id="time" />
                                             </NumberInput.Root>
                                         )}
                                     />

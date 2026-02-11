@@ -74,7 +74,7 @@ export const LearningRecord = () => {
   }else{
     return (
       <>
-        <h1>学習記録一覧</h1>
+        <h1 data-testid="title">学習記録一覧</h1>
         <InputInfo infoType="Text" inputValue={inputText} setInputText={setInputText} setInputTime={setInputTime} />
         <InputInfo infoType="Time" inputValue={inputTime.toString()} setInputText={setInputText} setInputTime={setInputTime} />
         <CheckInputInfo infoType="Text" inputValue={inputText} />
@@ -82,7 +82,7 @@ export const LearningRecord = () => {
   
         <ShowRecord records={records} onClick={onDeleteRecord} />
   
-        <Button onClick={() => setOpen(true)}>登録</Button>
+        <Button data-testid="registerButton" onClick={() => setOpen(true)}>登録</Button>
         <RegisterModal open={open} setOpen={setOpen} record={{"title":inputText, "time":inputTime}} reload={getRecords} />
         <ShowError error={error} />
         <ShowCumTime cumTime={cumTime} />

@@ -2,7 +2,7 @@ export const Loading = () => {
 
     return (
         <>
-            <div>Loading...</div>
+            <div data-testid="load">Loading...</div>
         </>
     );
 }

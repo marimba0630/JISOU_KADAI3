@@ -1,4 +1,5 @@
 import { Input, NumberInput } from "@chakra-ui/react"
+import { type ChangeEvent} from "react";
 
 type Props = {
     infoType: string;
@@ -7,13 +8,17 @@ type Props = {
     setInputTime: (time: number) => void;
 };
 
+type ValueChangeDetails = {
+    value: string;
+};
+
 export const InputInfo = (props:Props) => {
     const {infoType, inputValue, setInputText, setInputTime} = props;
 
     if(infoType === "Text"){
         return(
             <div>
-                学習内容<Input width="300px" value={inputValue} onChange={(e) => setInputText(e.target.value)} />
+                学習内容<Input width="300px" value={inputValue} onChange={(e: ChangeEvent<HTMLInputElement>) => setInputText(e.target.value)} />
             </div>
         );
     }
@@ -21,7 +26,7 @@ export const InputInfo = (props:Props) => {
         return(
             <div>
                 学習時間
-                    <NumberInput.Root width="200px" value={inputValue} onValueChange={(e) => setInputTime(parseInt(e.value))}>
+                    <NumberInput.Root width="200px" value={inputValue.toString()} onValueChange={(details: ValueChangeDetails) => setInputTime(Number(details.value))}>
                         <NumberInput.Control />
                         <NumberInput.Input />
                     </NumberInput.Root>
