@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react"
+import { memo, useEffect, useRef } from "react"
 import { Stack, Dialog, CloseButton, Field, Input, Button, NumberInput } from "@chakra-ui/react"
 import { insertRecord } from "../lib/supabaseCRUDFunctions"
 import { useForm, Controller } from "react-hook-form"
@@ -15,17 +15,18 @@ type FormValues = {
     time: number;
 };
 
-type ValueChangeDetails = {
+/*type ValueChangeDetails = {
     value: string;
 };
-
+*/
 export const RegisterModal = memo((props: Props) => {
     const { record, open, setOpen, reload } = props; 
 
-    const { register, control, reset, handleSubmit, formState:{errors}, trigger } = useForm<FormValues>({defaultValues: {title:"", time:0}, mode: "onChange"});
+    const { register, control, reset, handleSubmit, formState:{errors}, trigger } = useForm<FormValues>({defaultValues: {title:"", time:0}, mode: "onBlur"});
+
 
     useEffect(() => {
-       if(open){
+        if(open){
             reset({
                 title: record?.title ?? "",
                 time: record?.time ?? 0
@@ -34,7 +35,7 @@ export const RegisterModal = memo((props: Props) => {
             setTimeout(() => {
                 trigger(["title", "time"]);
             }, 0);
-       }
+        }
     }, [record, open, reset, trigger]);
 
     const onSubmit = async (data: FormValues) => {
@@ -53,7 +54,7 @@ export const RegisterModal = memo((props: Props) => {
                         reset();
                     }
                 }}
-                trapFocus={false}
+                modal={false}
                 >
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
@@ -81,22 +82,30 @@ export const RegisterModal = memo((props: Props) => {
                                         name="time"
                                         control={control}
                                         rules={{
-                                            validate: v =>
-                                                v >= 0 || "時間は0以上である必要があります"
+                                            validate: (value) =>{
+                                                if (value === undefined) return "時間の入力は必須です";
+                                                if (value < 0) return "時間は0以上である必要があります";
+                                                return true;
+                                            },
                                         }}
                                         render = {({field}) => (
-                                            <NumberInput.Root 
-                                                value={String(field.value ?? "0")} 
-                                                width="200px" 
-                                                onValueChange={(details: ValueChangeDetails) => {
-                                                    field.onChange(parseInt(details.value));}}
-                                            >
+                                                <NumberInput.Root 
+                                                    name={field.name}
+                                                    value={field.value !== undefined ? String(field.value) : ""} 
+                                                    width="200px" 
+                                                    onValueChange={(details) => {
+                                                        field.onChange(
+                                                            details.value === "" ? undefined : Number(details.value)
+                                                        );
+                                                    }}
+                                                >
                                                 <NumberInput.Control />
-                                                <NumberInput.Input id="time" />
-                                            </NumberInput.Root>
-                                        )}
+                                                <NumberInput.Input id="time" onBlur={field.onBlur} />
+                                                </NumberInput.Root>
+                                        )
+                                    }
                                     />
-                                    {<Field.ErrorText>時間は0以上である必要があります</Field.ErrorText>}
+                                    <Field.ErrorText>{errors.time?.message}</Field.ErrorText>
                                 </Field.Root>
                             </Stack>
                         </Dialog.Body>
