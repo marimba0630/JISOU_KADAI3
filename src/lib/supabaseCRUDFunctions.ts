@@ -36,3 +36,14 @@ export const deleteRecord = async ( id:number ) => {
         throw new Error(response.error.message);
     }
 }
+
+export const updateRecord = async ( record: {title: string; time: number;}, id:number ) => {
+    const response = await supabase
+    .from("study-record")
+    .update(record)
+    .eq("id", id);
+
+    if (response.error) {
+        throw new Error(response.error.message);
+    }
+}

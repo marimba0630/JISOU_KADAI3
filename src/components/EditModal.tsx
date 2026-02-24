@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef } from "react"
 import { Stack, Dialog, CloseButton, Field, Input, Button, NumberInput } from "@chakra-ui/react"
-import { insertRecord } from "../lib/supabaseCRUDFunctions"
+import { insertRecord, updateRecord } from "../lib/supabaseCRUDFunctions"
 import { useForm, useController } from "react-hook-form"
 
 type Props = {
@@ -20,14 +20,21 @@ type RecordData = {
     time: number;
 }
 
-export const RegisterModal = memo((props: Props) => {
+export const EditModal = memo((props: Props) => {
     const { record, open, setOpen, reload } = props; 
 
     const { register, control, reset, handleSubmit, formState:{errors}, trigger } = useForm<FormValues>({defaultValues: {title:"", time:null}, mode: "onBlur"});
 
 
     useEffect(() => {
-        if(!open) return;
+        if(!open) {
+            reset({
+                title: "",
+                time: ""
+            });
+
+            return;
+        }
 
         reset({
             title: record?.title ?? "",
@@ -38,7 +45,7 @@ export const RegisterModal = memo((props: Props) => {
 
     const onSubmit = async (tempdata: FormValues) => {
         const data : RecordData = {title: tempdata.title, time: Number(tempdata.time)};
-        await insertRecord(data);
+        await updateRecord(data, record.id);
         setOpen(false);
         reload();
     };
@@ -58,7 +65,7 @@ export const RegisterModal = memo((props: Props) => {
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
                     <Dialog.Content pb={2}>
-                        <Dialog.Header>新規登録</Dialog.Header>
+                        <Dialog.Header>記録編集</Dialog.Header>
                         <Dialog.Body>
                             <Stack gap={4}>
                                 <Field.Root invalid={!!errors.title}>
@@ -91,7 +98,7 @@ export const RegisterModal = memo((props: Props) => {
                             </Stack>
                         </Dialog.Body>
                         <Dialog.Footer>
-                            <Button onClick={handleSubmit(onSubmit)}>登録</Button>
+                            <Button onClick={handleSubmit(onSubmit)}>保存</Button>
                             <Button type="button" onClick={() => setOpen(false)}>キャンセル</Button>
                         </Dialog.Footer>
                     </Dialog.Content>

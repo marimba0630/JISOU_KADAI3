@@ -6,15 +6,15 @@ import { ShowError } from "./components/ShowError";
 import { ShowCumTime } from "./components/ShowCumTime";
 import { getAllRecords, deleteRecord } from "./lib/supabaseCRUDFunctions";
 import { Loading } from "./components/Loading";
-import { type Record } from "./domain/record";
+import { Record } from "./domain/record";
 
 import { Button } from "@chakra-ui/react";
 //import { Register } from "./components/Register";
-import { RegisterModal } from "./components/RegisterModal";
+import { Modal } from "./components/Modal";
 
 export const LearningRecord = () => {
   const [inputText, setInputText] = useState("");
-  const [inputTime, setInputTime] = useState(0);
+  const [inputTime, setInputTime] = useState("");
   const [records, setRecords] = useState<Record[]>([]);
   const [error, setError] = useState("");
   const [cumTime, setCumTime] = useState(0);
@@ -75,15 +75,15 @@ export const LearningRecord = () => {
     return (
       <>
         <h1 data-testid="title">学習記録一覧</h1>
-        <InputInfo infoType="Text" inputValue={inputText} setInputText={setInputText} setInputTime={setInputTime} />
-        <InputInfo infoType="Time" inputValue={inputTime.toString()} setInputText={setInputText} setInputTime={setInputTime} />
+        <InputInfo inputValue={inputText} setInputValue={setInputText}>学習内容</InputInfo>
+        <InputInfo inputValue={inputTime} setInputValue={setInputTime}>時間</InputInfo>
         <CheckInputInfo infoType="Text" inputValue={inputText} />
-        <CheckInputInfo infoType="Time" inputValue={inputTime.toString()} />
+        <CheckInputInfo infoType="Time" inputValue={inputTime} />
   
-        <ShowRecord records={records} onClick={onDeleteRecord} />
+        <ShowRecord records={records} onClick={onDeleteRecord} getRecords={getRecords} />
   
         <Button data-testid="registerButton" onClick={() => setOpen(true)}>登録</Button>
-        <RegisterModal open={open} setOpen={setOpen} record={{"title":inputText, "time":inputTime}} reload={getRecords} />
+        <Modal record={{"title":inputText, "time":inputTime}} open={open} mode="Register" setOpen={setOpen} reload={getRecords} />
         <ShowError error={error} />
         <ShowCumTime cumTime={cumTime} />
       </>
