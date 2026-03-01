@@ -83,7 +83,7 @@ export const LearningRecord = () => {
         <ShowRecord records={records} onClick={onDeleteRecord} getRecords={getRecords} />
   
         <Button data-testid="registerButton" onClick={() => setOpen(true)}>登録</Button>
-        <Modal record={{"title":inputText, "time":inputTime}} open={open} mode="Register" setOpen={setOpen} reload={getRecords} />
+        <Modal record={{"id":0, "title":inputText, "time":Number(inputTime)}} open={open} mode="Register" setOpen={setOpen} reload={getRecords} />
         <ShowError error={error} />
         <ShowCumTime cumTime={cumTime} />
       </>

@@ -4,7 +4,7 @@ import { insertRecord, updateRecord } from "../lib/supabaseCRUDFunctions"
 import { useForm } from "react-hook-form"
 
 type Props = {
-    record: {id:number, title:string, time:number};
+    record: {id:number, title:string, time:number|null};
     open: boolean;
     mode: "Register" | "Update";
     setOpen: (open: boolean) => void;

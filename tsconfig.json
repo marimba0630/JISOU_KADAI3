@@ -1,17 +1,12 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
   "compilerOptions": {
     "jsx": "react-jsx",
     "module": "ESNext",
     "target": "ES2020",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "strict": true,
-    "types": ["jest", "@testing-library/jest-dom", "vitest/globals"],
+    "types": ["@testing-library/jest-dom", "vitest/globals"],
     "lib": ["DOM", "DOM.Iterable", "ES2020"]
   },
   "include": [

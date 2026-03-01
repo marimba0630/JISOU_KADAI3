@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { LearningRecord } from './LearningRecord'
 import { initAnalytics } from './lib/firebase'
-import { ChakraProvider, defaultConfig, createSystem, defaultSystem } from "@chakra-ui/react"
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
 
 initAnalytics();
 
