@@ -1,0 +1,38 @@
+name: Deploy to Firebase Hosting on merge
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build_and_test_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install
+        run: npm ci
+      
+      - name: Test
+        run: npm run test 
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{secrets.SUPABASE_URL}}
+          VITE_SUPABASE_ANON_KEY: ${{secrets.SUPABASE_ANON_KEY}}
+          VITE_REACT_APP_APP_KEY: ${{secrets.REACT_APP_APP_KEY}}
+          VITE_REACT_APP_AUTH_DOMAIN: ${{secrets.REACT_APP_AUTH_DOMAIN}}
+          VITE_REACT_APP_PROJECT_ID: ${{secrets.REACT_APP_PROJECT_ID}}
+          VITE_REACT_APP_STORAGEBUCKET: ${{secrets.REACT_APP_STORAGEBUCKET}}
+          VITE_REACT_APP_MESSAGING_SENDER_ID: ${{secrets.REACT_APP_MESSAGING_SENDER_ID}}
+          VITE_REACT_APP_APP_ID: ${{secrets.REACT_APP_APP_ID}}
+          VITE_REACT_APP_MEASUREMENT_ID: ${{secrets.REACT_APP_MEASUREMENT_ID}}
+
+      - name: Deploy
+        uses: FirebaseExtended/actions-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB-TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_STUDY_RECORD_1302C}}
+          channelId: live
+          projectId: shin-study-record-1302c
