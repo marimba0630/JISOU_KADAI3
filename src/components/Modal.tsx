@@ -1,10 +1,10 @@
-import { memo, useEffect, useRef } from "react"
-import { Stack, Dialog, CloseButton, Field, Input, Button, NumberInput } from "@chakra-ui/react"
+import { memo, useEffect } from "react"
+import { Stack, Dialog, Field, Input, Button } from "@chakra-ui/react"
 import { insertRecord, updateRecord } from "../lib/supabaseCRUDFunctions"
-import { useForm, useController } from "react-hook-form"
+import { useForm } from "react-hook-form"
 
 type Props = {
-    record: {title:string, time:number};
+    record: {id:number, title:string, time:number};
     open: boolean;
     mode: "Register" | "Update";
     setOpen: (open: boolean) => void;
@@ -24,7 +24,7 @@ type RecordData = {
 export const Modal = memo((props: Props) => {
     const { record, open, mode, setOpen, reload } = props; 
 
-    const { register, control, reset, handleSubmit, formState:{errors}, trigger } = useForm<FormValues>({defaultValues: {title:"", time:""}, mode: "onBlur"});
+    const { register, reset, handleSubmit, formState:{errors} } = useForm<FormValues>({defaultValues: {title:"", time:""}, mode: "onBlur"});
 
     const title = mode === "Register" ? "新規登録" : "記録編集";
     const submitButton = mode === "Register" ? "登録" : "保存";
@@ -58,7 +58,7 @@ export const Modal = memo((props: Props) => {
         <>
             <Dialog.Root
                 open={open}
-                initialFocusEl={null}
+                initialFocusEl={undefined}
                 onOpenChange={(e) => {
                     setOpen(e.open)
                 }}

@@ -1,4 +1,4 @@
-import { Input, NumberInput } from "@chakra-ui/react"
+import { Input } from "@chakra-ui/react"
 import { type ChangeEvent} from "react";
 
 type Props = {

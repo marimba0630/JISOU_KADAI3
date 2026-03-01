@@ -42,7 +42,7 @@ export const ShowRecord = (props: Props) => {
             ))}
             </Table.Body>
             </Table.Root>
-            <Modal record={selectedRecord} open={open} mode="Update" setOpen={setOpen} reload={getRecords} />
+            <Modal record={selectedRecord!} open={open} mode="Update" setOpen={setOpen} reload={getRecords} />
         </div>
     );
 

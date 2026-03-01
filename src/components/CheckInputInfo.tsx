@@ -1,6 +1,6 @@
 type Props = {
     infoType: string;
-    inputValue: String;
+    inputValue: string;
 };
 
 export const CheckInputInfo = (props: Props) => {
