@@ -33,7 +33,7 @@ export const LearningRecord = () => {
         setLoading(false);
       }else{
         setInputText("");
-        setInputTime(0);
+        setInputTime("");
       }
 
     } catch (error) {
@@ -58,7 +58,7 @@ export const LearningRecord = () => {
       return accumlator += record.time;
     }, 0);
     setInputText("");
-    setInputTime(0);
+    setInputTime("");
     setError("");
     setCumTime(newCumTime);
 
