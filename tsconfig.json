@@ -6,8 +6,8 @@
     "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "strict": true,
-    "types": ["@testing-library/jest-dom", "vitest/globals"],
-    "lib": ["DOM", "DOM.Iterable", "ES2020"]
+    "types": ["vite/client", "vitest/globals"],
+    "lib": ["DOM", "DOM.Iterable", "ES2020", "ES2021.Intl"]
   },
   "include": [
     "src",
